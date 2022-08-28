@@ -15,6 +15,7 @@ model User {
   password Password?
   notes    Note[]
   proposals Proposal[]
+  githubToken String?
 }
 
 model Password {
