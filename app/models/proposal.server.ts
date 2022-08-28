@@ -1,37 +1,37 @@
-import type { User, Note } from '@prisma/client'
+import type { User, Proposal } from '@prisma/client'
 
 import { prisma } from '~/db.server'
 
-export type { Note } from '@prisma/client'
+export type { Proposal } from '@prisma/client'
 
-export function getNote({
+export function getProposal({
   id,
   userId,
-}: Pick<Note, 'id'> & {
+}: Pick<Proposal, 'id'> & {
   userId: User['id']
 }) {
-  return prisma.note.findFirst({
+  return prisma.proposal.findFirst({
     select: { id: true, body: true, title: true },
     where: { id, userId },
   })
 }
 
-export function getNoteListItems({ userId }: { userId: User['id'] }) {
-  return prisma.note.findMany({
+export function getProposalListItems({ userId }: { userId: User['id'] }) {
+  return prisma.proposal.findMany({
     where: { userId },
     select: { id: true, title: true },
     orderBy: { updatedAt: 'desc' },
   })
 }
 
-export function createNote({
+export function createProposal({
   body,
   title,
   userId,
-}: Pick<Note, 'body' | 'title'> & {
+}: Pick<Proposal, 'body' | 'title'> & {
   userId: User['id']
 }) {
-  return prisma.note.create({
+  return prisma.proposal.create({
     data: {
       title,
       body,
@@ -44,11 +44,11 @@ export function createNote({
   })
 }
 
-export function deleteNote({
+export function deleteProposal({
   id,
   userId,
-}: Pick<Note, 'id'> & { userId: User['id'] }) {
-  return prisma.note.deleteMany({
+}: Pick<Proposal, 'id'> & { userId: User['id'] }) {
+  return prisma.proposal.deleteMany({
     where: { id, userId },
   })
 }
