@@ -2,19 +2,20 @@ import type { LoaderArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 
-import { getProposalListItems } from '~/models/proposal.server'
+import { getNoteListItems } from '~/models/note.server'
 import { requireUserId } from '~/session.server'
 import { useUser } from '~/utils'
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request)
-  const proposalListItems = await getProposalListItems({ userId })
-  return json({ proposalListItems })
+  const noteListItems = await getNoteListItems({ userId })
+  return json({ noteListItems })
 }
 
-export default function ProposalsPage() {
+export default function NotesPage() {
   const data = useLoaderData<typeof loader>()
   const user = useUser()
+  console.log('user:', user)
 
   return (
     <div className="flex h-full min-h-screen flex-col">
@@ -22,9 +23,7 @@ export default function ProposalsPage() {
         <h1 className="text-3xl font-bold">
           <Link to="/">RuleMaker</Link>
         </h1>
-        <p>
-          <Link to="/profile">{user.email}</Link>
-        </p>
+        <Link to="/profile">{user.email}</Link>
         <Form action="/logout" method="post">
           <button
             type="submit"
@@ -36,36 +35,34 @@ export default function ProposalsPage() {
       </header>
 
       <main className="flex h-full bg-white">
-        <div className="h-full w-80 border-r bg-gray-50">
+        {/* <div className="h-full w-80 border-r bg-gray-50">
           <Link to="new" className="block p-4 text-xl text-blue-500">
-            + New Proposal
+            + New Note
           </Link>
 
           <hr />
 
-          {data.proposalListItems.length === 0 ? (
-            <p className="p-4">No proposals yet</p>
+          {data.noteListItems.length === 0 ? (
+            <p className="p-4">No notes yet</p>
           ) : (
             <ol>
-              {data.proposalListItems.map(proposal => (
-                <li key={proposal.id}>
+              {data.noteListItems.map(note => (
+                <li key={note.id}>
                   <NavLink
                     className={({ isActive }) =>
                       `block border-b p-4 text-xl ${isActive ? 'bg-white' : ''}`
                     }
-                    to={proposal.id}
+                    to={note.id}
                   >
-                    📝 {proposal.title}
+                    📝 {note.title}
                   </NavLink>
                 </li>
               ))}
             </ol>
           )}
-        </div>
+        </div> */}
 
-        <div className="flex-1 p-6">
-          <Outlet />
-        </div>
+        <div className="flex-1 p-6">{JSON.stringify(user)}</div>
       </main>
     </div>
   )
